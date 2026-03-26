@@ -129,6 +129,89 @@ describe('toOpenAiRequestBody for new GPT-4.1 variants', () => {
   });
 });
 
+describe('gptModel - GPT-5.4 variants', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should correctly define gpt-5.4, gpt-5.4-mini, and gpt-5.4-nano', () => {
+    const gpt54 = defineCompatOpenAIModel({
+      name: 'openai/gpt-5.4',
+      client: {} as OpenAI,
+      modelRef: testModelRef('openai/gpt-5.4'),
+    });
+    expect({
+      name: gpt54.__action.name,
+      supports: gpt54.__action.metadata?.model.supports,
+    }).toStrictEqual({
+      name: 'openai/gpt-5.4',
+      supports: {
+        multiturn: true,
+        tools: true,
+        media: true,
+        systemRole: true,
+        output: ['text', 'json'],
+      },
+    });
+
+    const gpt54mini = defineCompatOpenAIModel({
+      name: 'openai/gpt-5.4-mini',
+      client: {} as OpenAI,
+      modelRef: testModelRef('openai/gpt-5.4-mini'),
+    });
+    expect({
+      name: gpt54mini.__action.name,
+      supports: gpt54mini.__action.metadata?.model.supports,
+    }).toStrictEqual({
+      name: 'openai/gpt-5.4-mini',
+      supports: {
+        multiturn: true,
+        tools: true,
+        media: true,
+        systemRole: true,
+        output: ['text', 'json'],
+      },
+    });
+
+    const gpt54nano = defineCompatOpenAIModel({
+      name: 'openai/gpt-5.4-nano',
+      client: {} as OpenAI,
+      modelRef: testModelRef('openai/gpt-5.4-nano'),
+    });
+    expect({
+      name: gpt54nano.__action.name,
+      supports: gpt54nano.__action.metadata?.model.supports,
+    }).toStrictEqual({
+      name: 'openai/gpt-5.4-nano',
+      supports: {
+        multiturn: true,
+        tools: true,
+        media: true,
+        systemRole: true,
+        output: ['text', 'json'],
+      },
+    });
+  });
+});
+
+describe('toOpenAIRequestBody for GPT-5.4 variants', () => {
+  const baseRequest = { messages: [] } as GenerateRequest;
+
+  it('should not throw for gpt-5.4', () => {
+    expect(() => toOpenAIRequestBody('gpt-5.4', baseRequest)).not.toThrow();
+  });
+  it('should not throw for gpt-5.4-mini', () => {
+    expect(() =>
+      toOpenAIRequestBody('gpt-5.4-mini', baseRequest)
+    ).not.toThrow();
+  });
+  it('should not throw for gpt-5.4-nano', () => {
+    expect(() =>
+      toOpenAIRequestBody('gpt-5.4-nano', baseRequest)
+    ).not.toThrow();
+  });
+});
+
 function testModelRef(name: string) {
   return modelRef({
     name,
